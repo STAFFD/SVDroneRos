@@ -11,9 +11,11 @@ find_package(
     serial
 )
 
+generate_messages(
+    DEPENDENCIES 
+    std_msgs 
+    sensor_msgs)
 
-
-generate_messages(DEPENDENCIES std_msgs sensor_msgs)
 catkin_package()
 
 include_directories(
