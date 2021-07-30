@@ -56,8 +56,11 @@ private:
     ros::Publisher pub_kal;
     uint8_t resultBuffer[TRANS_TOTAL];
     DroneData droneData;
+    sensor_msgs::Imu imu;
+    sensor_msgs::Imu imu_kal;
 public:
     DroneMonitor();
+    void run();
     ~DroneMonitor();
 };
 

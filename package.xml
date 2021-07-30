@@ -1,12 +1,12 @@
 <package format="2">
-  <name>SVDroneMonitor</name>
+  <name>SVDroneMon</name>
   <version>1.0.0</version>
   <description>
   This package provides fuck capability.
   </description>
-  <maintainer email="fuck@gmail.com">sv</maintainer>
+  <maintainer email="sheldonvon@outlook.com">sv</maintainer>
   <license>BSD</license>
+  
   <buildtool_depend>catkin</buildtool_depend>
-   <build_depend>serial</build_depend>
-
+  <build_depend>serial</build_depend>
 </package>
