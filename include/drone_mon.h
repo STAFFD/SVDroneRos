@@ -7,7 +7,7 @@
 #include <serial/serial.h>
 #include <sensor_msgs/Imu.h>
 
-// #define DEBUG_PRINT
+#define DEBUG_PRINT
 
 #define TRANS_BIAS              -2
 
@@ -32,7 +32,17 @@
 #define TRANS_KAL_ROLL_LOW		15+TRANS_BIAS
 #define TRANS_KAL_PITCH_HIGH	16+TRANS_BIAS
 #define TRANS_KAL_PITCH_LOW		17+TRANS_BIAS
-#define TRANS_TOTAL             TRANS_KAL_PITCH_LOW+1
+
+#define TRANS_Q1_HIGH		18+TRANS_BIAS
+#define TRANS_Q1_LOW		19+TRANS_BIAS
+#define TRANS_Q2_HIGH		20+TRANS_BIAS
+#define TRANS_Q2_LOW		21+TRANS_BIAS
+
+#define TRANS_Q3_HIGH		22+TRANS_BIAS
+#define TRANS_Q3_LOW		23+TRANS_BIAS
+#define TRANS_Q4_HIGH		24+TRANS_BIAS
+#define TRANS_Q4_LOW		25+TRANS_BIAS
+#define TRANS_TOTAL             TRANS_Q4_LOW+1
 
 using namespace std;
 
@@ -46,6 +56,10 @@ typedef struct{
 
     float kal_pitch;
     float kal_roll;
+    float q1;
+    float q2;
+    float q3;
+    float q4;
 }DroneData;
 
 class DroneMonitor{

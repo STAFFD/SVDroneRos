@@ -3,7 +3,7 @@
     <arg default="$(find Drone_description)/launch/urdf.rviz" name="rvizconfig"/>
 
     <node pkg="SVDroneMon" type="SVDroneMon_drone_mon_node" name="SVDroneMon_drone_mon_node" output="screen"> 
-        <param name="usb_port" type="str" value="/dev/ttyUSB0" />
+        <param name="usb_port" type="str" value="/dev/tty.usbserial-14130" />
         <param name="baudrate" type="int" value="57600" />
     </node>
 
@@ -11,7 +11,7 @@
     <param command="$(find xacro)/xacro $(arg model)" name="robot_description"/>
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
     <node pkg="SVDroneMon" type="SVDroneMon_drone_viz_node" name="SVDroneMon_drone_viz_node" output="screen"> 
-        
+        <!--  -->
     </node>
    <node args="-d $(arg rvizconfig)" name="rviz" pkg="rviz" required="true" type="rviz"/>
 

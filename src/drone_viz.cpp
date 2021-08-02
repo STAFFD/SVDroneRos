@@ -43,11 +43,19 @@ void DroneViz::IMUCallback(const sensor_msgs::Imu imuData){
         // odom_trans.transform.translation.x = cos(angle)*2;
         // odom_trans.transform.translation.y = sin(angle)*2;
         // odom_trans.transform.translation.z = .7;
-        odom_trans.transform.rotation = 
-        tf::createQuaternionMsgFromRollPitchYaw(
-            -imuData.linear_acceleration.y*DEGREE2RAD, 
-            imuData.linear_acceleration.x*DEGREE2RAD, 
-            imuData.linear_acceleration.z*DEGREE2RAD);
+
+        geometry_msgs::Quaternion q_msg;
+        tf::Quaternion q(imuData.orientation.x, 
+                    imuData.orientation.y, 
+                    imuData.orientation.z, 
+                    imuData.orientation.w);
+        tf::quaternionTFToMsg(q, q_msg);
+        odom_trans.transform.rotation = q_msg;
+        // odom_trans.transform.rotation =
+        // tf::createQuaternionMsgFromRollPitchYaw(
+        //     -imuData.linear_acceleration.y*DEGREE2RAD, 
+        //     imuData.linear_acceleration.x*DEGREE2RAD, 
+        //     imuData.linear_acceleration.z*DEGREE2RAD);
 
         //send the joint state and transform
         broadcaster.sendTransform(odom_trans);
