@@ -28,10 +28,12 @@ DroneMonitor::DroneMonitor(/* args */){
 
 void DroneMonitor::run(){
     while(ros::ok()){
-        if (ser.available() >= TRANS_TOTAL){
-            if(ser.read() == "S" && ser.read() == "V"){
+        if (ser.available() >= TRANS_TOTAL*2){
+            if(ser.read() == "S")
+            if(ser.read() == "V"){
                 ser.read(resultBuffer, TRANS_TOTAL);
-                droneData.angle_roll = (float)((int16_t)(resultBuffer[TRANS_ANG_ROLL_HIGH] << 8 | resultBuffer[TRANS_GYRO_ROLL_LOW]))/100;
+                if(resultBuffer[TRANS_END_HIGH]!='R' || resultBuffer[TRANS_END_LOW]!='N')continue;
+                droneData.angle_roll = (float)((int16_t)(resultBuffer[TRANS_ANG_ROLL_HIGH] << 8 | resultBuffer[TRANS_ANG_ROLL_LOW]))/100;
                 droneData.angle_pitch = (float)((int16_t)(resultBuffer[TRANS_ANG_PITCH_HIGH] << 8 | resultBuffer[TRANS_ANG_PITCH_LOW]))/100;
                 droneData.angle_yaw = (float)((int16_t)(resultBuffer[TRANS_ANG_YAW_HIGH] << 8 | resultBuffer[TRANS_ANG_YAW_LOW]))/100;
                 droneData.gyro_roll = (float)((int16_t)(resultBuffer[TRANS_GYRO_ROLL_HIGH] << 8 | resultBuffer[TRANS_GYRO_ROLL_LOW]))/100;
@@ -40,6 +42,10 @@ void DroneMonitor::run(){
                 
                 droneData.kal_roll = (float)((int16_t)(resultBuffer[TRANS_KAL_ROLL_HIGH] << 8 | resultBuffer[TRANS_KAL_ROLL_LOW]))/100;
                 droneData.kal_pitch = (float)((int16_t)(resultBuffer[TRANS_KAL_PITCH_HIGH] << 8 | resultBuffer[TRANS_KAL_PITCH_LOW]))/100;
+                droneData.kal_yaw = (float)((int16_t)(resultBuffer[TRANS_KAL_YAW_HIGH] << 8 | resultBuffer[TRANS_KAL_YAW_LOW]))/100;
+
+
+                droneData.mag_ang = (float)((int16_t)(resultBuffer[TRANS_MAG_ANG_HIGH] << 8 | resultBuffer[TRANS_MAG_ANG_LOW]))/100;
 
 
                 droneData.q1 = (float)((int16_t)(resultBuffer[TRANS_Q1_HIGH] << 8 | resultBuffer[TRANS_Q1_LOW]))/10000;
@@ -56,11 +62,14 @@ void DroneMonitor::run(){
                 imu.linear_acceleration.y = droneData.angle_pitch;
                 imu.linear_acceleration.z = droneData.angle_yaw;
 
-
-
                 imu_kal.header.stamp = ros::Time::now();
                 imu_kal.linear_acceleration.x = droneData.kal_roll;
                 imu_kal.linear_acceleration.y = droneData.kal_pitch;
+                imu_kal.linear_acceleration.z = droneData.kal_yaw;
+
+                // imu_kal.linear_acceleration.x = droneData.angle_roll;
+                // imu_kal.linear_acceleration.y = droneData.angle_pitch;
+                // imu_kal.linear_acceleration.z = droneData.angle_yaw;
 
                 imu_kal.orientation.x = droneData.q2;
                 imu_kal.orientation.y = droneData.q3;
@@ -69,17 +78,25 @@ void DroneMonitor::run(){
                 pub_.publish(imu);
                 pub_kal.publish(imu_kal);
                 #ifdef DEBUG_PRINT
+                    cout << endl << endl << endl << endl;
+                    cout << "--------------------------------------" << endl;
                     cout << "angle_roll: " << droneData.angle_roll << endl;
                     cout << "angle_pitch: " << droneData.angle_pitch << endl;
                     cout << "angle_yaw: " << droneData.angle_yaw << endl;
                     cout << "gyro_roll: " << droneData.gyro_roll << endl;
                     cout << "gyro_pitch: " << droneData.gyro_pitch << endl;
                     cout << "gyro_yaw: " << droneData.gyro_yaw << endl;
+                    cout << "kal_pitch: " << droneData.kal_pitch << endl;
+                    cout << "kal_roll: " << droneData.kal_roll << endl;
+                    cout << "kal_yaw: " << droneData.kal_yaw << endl;
+                
+                    cout << "Mag angle: " << droneData.mag_ang << endl;
                     
                     cout << "q1: " << droneData.q1 << endl;
                     cout << "q2: " << droneData.q2 << endl;
                     cout << "q3: " << droneData.q3 << endl;
                     cout << "q4: " << droneData.q4 << endl;
+                    cout << "--------------------------------------" << endl;
                 #endif
             }
 

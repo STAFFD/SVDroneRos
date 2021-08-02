@@ -48,7 +48,10 @@
 #define TRANS_Q4_HIGH			28+TRANS_BIAS
 #define TRANS_Q4_LOW			29+TRANS_BIAS
 
-#define TRANS_TOTAL             TRANS_Q4_LOW+1
+#define TRANS_END_HIGH		    30+TRANS_BIAS
+#define TRANS_END_LOW			31+TRANS_BIAS
+
+#define TRANS_TOTAL             TRANS_END_LOW+1
 
 using namespace std;
 
@@ -62,6 +65,9 @@ typedef struct{
 
     float kal_pitch;
     float kal_roll;
+    float kal_yaw;
+
+    float mag_ang;
     float q1;
     float q2;
     float q3;
